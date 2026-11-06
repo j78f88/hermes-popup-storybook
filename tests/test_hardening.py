@@ -124,14 +124,14 @@ class ReleaseCheckHardeningTests(unittest.TestCase):
     def test_release_check_rules_and_structure(self):
         text = "\n".join(
             [
-                "mail person@" + "invalid.test",
-                "host 192.168." + "1.9",
-                "path /" + "home/example/private",
+                "mail person@test.invalid",
+                "host 192.168.1.9",
+                "path /home/example/private",
                 "token github_" + "pat_" + "a" * 30,
                 "-----BEGIN " + "PRIVATE KEY-----",
                 "password" + "=supersecret",
-                "host box.tail1234." + "ts.net",
-                "path C:\\" + "Users\\example\\file",
+                "host box.tail1234.ts.net",
+                "path C:\\Users\\example\\file",
             ]
         )
         rules = {finding[2] for finding in release_check.scan_text("fixture", text, ["private"])}
@@ -185,7 +185,7 @@ class ReleaseCheckHardeningTests(unittest.TestCase):
             "new.txt (history abcdef12)",
             7,
             "Tailnet hostname",
-            "host.tail." + "ts.net",
+            "host.tail.ts.net",
         )
         baseline = {release_check.finding_id(known)}
         remaining, count, stale = release_check.filter_history([known, new], baseline)

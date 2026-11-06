@@ -22,7 +22,7 @@ These eight decisions record how the engine and its workflow stay simple while a
 
 - **Status:** accepted
 - **Date:** 2026-10-29
-- **Decision:** Add `--claims report|strict|off` to `tools/check_ledger.py` with `report` as default. The scaffold work order uses `strict` for new stories. Existing books can run `report` until their page facts are aligned. Pre-template Edition 1 ledgers remain supported for regression checks.
+- **Decision:** Add `--claims report|strict|off` to `tools/check_ledger.py` with `report` as default. The scaffold work order uses `strict` for new stories. Existing books can run `report` until their page facts are aligned. Legacy lane-format ledgers remain supported for regression checks.
 - **Reason:** Numeric checks are valuable, but old books may cite the supporting source elsewhere in the research ledgers. A staged mode protects compatibility and prevents silent omission.
 - **Rejected:** Breaking existing books immediately or claiming that number matching proves every sentence.
 

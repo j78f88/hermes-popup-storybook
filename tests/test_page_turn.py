@@ -65,7 +65,7 @@ class PageTurnTests(unittest.TestCase):
                 )
                 page = context.new_page()
                 page.goto(output.as_uri() + f"?phone={phone}#ch1")
-                # Codex model: forward (and on phones) the leaf's front carries the old picture,
+                # Physical model: forward (and on phones) the leaf's front carries the old picture,
                 # folding shut as the leaf rises; the new picture lies under the leaf and rises with it.
                 # Drive the turn by hand in steps and read both pop-ups after each step, so frame timing
                 # on a slow host cannot thin the samples.

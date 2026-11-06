@@ -14,7 +14,7 @@ Use `--claims report` to print warnings for unsupported numbers and dates withou
 
 Use `--claims strict` on new stories so unsupported numeric claims return a non-zero exit status.
 
-Pre-template Edition 1 ledgers with a top-level `lane` key and object `source` fields remain supported for regression checks.
+Legacy lane-format ledgers with a top-level `lane` key and object `source` fields remain supported for regression checks.
 
 Written number words and narrative claims without digits still need human review.
 

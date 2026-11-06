@@ -97,9 +97,9 @@ class ValidateTests(unittest.TestCase):
         cases = [
             "token ghp_" + "a" * 30,
             "key sk-" + "b" * 30,
-            "host 100." + "64.1.2",
-            "lan 192." + "168.1.20",
-            "box.tail1234." + "ts.net",
+            "host 100.64.1.2",
+            "lan 192.168.1.20",
+            "box.tail1234.ts.net",
             "mail someone@example.com",
             "password: hunter2hunter2",
         ]

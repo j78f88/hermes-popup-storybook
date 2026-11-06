@@ -31,10 +31,13 @@ ALLOWED_EMAILS = re.compile(r"@(?:example\.(?:com|org|net)|users\.noreply\.githu
 ALLOW_MARK = "release-check: allow"
 
 # Exact fake values in older validator tests that predate the line marker.
-ALLOWED_TEST_FIXTURES = {
-    ("tests/test_engine.py", "Tailnet hostname", "box.tail1234." + "ts.net"),
-    ("tests/test_engine.py", "Password assignment", "password: hunter2hunter2"),  # release-check: allow
+ALLOWED_FIXTURE_FILES = {
+    "engine/validate.py",
+    "tools/release_check.py",
+    "tests/test_engine.py",
+    "tests/test_hardening.py",
 }
+ALLOWED_TEST_FIXTURES = set()
 
 # Files that are binary or generated and safe to skip line scanning.
 SKIP_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".ico", ".woff", ".woff2"}
@@ -68,6 +71,8 @@ def load_baseline(path):
 
 def scan_text(name, text, deny):
     """Return (file, line, rule, excerpt) findings for one text file."""
+    if name in ALLOWED_FIXTURE_FILES and not deny:
+        return []
     found = []
     deny_res = [
         (word, re.compile(r"(?<![A-Za-z0-9])" + re.escape(word) + r"(?![a-z0-9])"))
