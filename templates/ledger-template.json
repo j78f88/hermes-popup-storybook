@@ -1,0 +1,40 @@
+{
+  "facts": [
+    {
+      "id": "starter-fact-001",
+      "claim": "The starter scene has one shelf.",
+      "value": 1,
+      "source": "arrival-example",
+      "source_kind": "example",
+      "ref": "Starter record A",
+      "excerpt": "One shelf was checked.",
+      "date": "",
+      "verified_by": "Starter example",
+      "notes": "Replace this fictional fact with a verified claim."
+    },
+    {
+      "id": "starter-fact-002",
+      "claim": "The starter scene moves one box.",
+      "value": 1,
+      "source": "rain-example",
+      "source_kind": "example",
+      "ref": "Starter record B",
+      "excerpt": "One box was moved.",
+      "date": "",
+      "verified_by": "Starter example",
+      "notes": "Replace this fictional fact with a verified claim."
+    },
+    {
+      "id": "starter-fact-003",
+      "claim": "The starter scene keeps one plant.",
+      "value": 1,
+      "source": "opening-example",
+      "source_kind": "example",
+      "ref": "Starter record C",
+      "excerpt": "One plant was kept.",
+      "date": "",
+      "verified_by": "Starter example",
+      "notes": "Replace this fictional fact with a verified claim."
+    }
+  ]
+}

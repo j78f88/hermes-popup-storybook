@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Story fact ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["facts"],
+  "properties": {
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "claim",
+          "value",
+          "source",
+          "source_kind",
+          "ref",
+          "excerpt",
+          "date",
+          "verified_by",
+          "notes"
+        ],
+        "properties": {
+          "id": {"type": "string"},
+          "claim": {"type": "string"},
+          "value": {"type": ["string", "number", "boolean", "null"]},
+          "source": {"type": "string", "minLength": 1},
+          "source_kind": {"type": "string"},
+          "ref": {"type": "string"},
+          "excerpt": {"type": "string"},
+          "date": {"type": "string"},
+          "verified_by": {"type": "string"},
+          "notes": {"type": "string"}
+        }
+      }
+    }
+  }
+}

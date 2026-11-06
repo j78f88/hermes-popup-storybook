@@ -1,0 +1,824 @@
+{
+ "title": "Pip and the Paper Trail",
+ "subtitle": "A small fictional story that demonstrates every paper mechanism",
+ "byline": "Example story",
+ "lang": "en-AU",
+ "unit": "Page",
+ "colophon": "This is a fictional demonstration. All records and figures are example data, not real events.",
+ "cover": {
+  "hero": "robot_wave",
+  "button": "Open the book"
+ },
+ "contents": {
+  "kicker": "Inside",
+  "title": "Contents",
+  "intro": "Pip turns a muddled parcel room into a calm little library, one paper mechanism at a time.",
+  "scene": {
+   "sky": "dawn",
+   "ground": "grass",
+   "alt": "Pip the robot waves beside a signpost at dawn.",
+   "wall": [
+    {
+     "sprite": "sun",
+     "x": 80,
+     "y": 24,
+     "scale": 2.2
+    },
+    {
+     "sprite": "cloud",
+     "x": 24,
+     "y": 18,
+     "scale": 1.8,
+     "bob": true
+    }
+   ],
+   "pieces": [
+    {
+     "sprite": "hill",
+     "x": 50,
+     "depth": 4,
+     "scale": 3.2
+    },
+    {
+     "sprite": "signpost",
+     "x": 66,
+     "depth": 3,
+     "scale": 2.2
+    },
+    {
+     "sprite": "robot_wave",
+     "x": 36,
+     "depth": 1,
+     "scale": 2.8,
+     "bob": true
+    },
+    {
+     "sprite": "tree",
+     "x": 14,
+     "depth": 3,
+     "scale": 2.3
+    },
+    {
+     "sprite": "plant",
+     "x": 88,
+     "depth": 1,
+     "scale": 1.6
+    }
+   ]
+  }
+ },
+ "chapters": [
+  {
+   "number": 1,
+   "title": "The empty corner",
+   "when": "Monday morning",
+   "status": "written",
+   "text": [
+    "Pip opened the parcel room and found six boxes, two empty shelves and no useful plan. A note on the door said the room would become a neighbourhood library by sunset. Pip liked clear jobs, but this one looked like a pile of smaller jobs wearing one large coat. He rolled the nearest box to the middle and listened. Something inside gave a papery rustle.",
+    "The first box held adventure stories. The second held cookbooks. The others contained maps, poems, puzzles and one book about repairing squeaky wheels. Pip wanted to unpack everything at once. Instead, he drew a simple map of the room. One shelf would hold stories. The other would hold facts. A low table near the window would become the reading spot.",
+    "When Pip pushed the first box, the tall shelf wobbled. That changed the plan. He tightened its feet, tested it twice and placed one open book where visitors could see it. The empty corner no longer felt forgotten. It had a safe shelf, a starting point and enough space for the next careful step. Pip marked the map with a bright green tick."
+   ],
+   "tab": {
+    "label": "The first test",
+    "hint": "Pull to move Pip and raise the ready sign",
+    "text": "Pip crosses the room while a paper ready sign stands up on the wall.",
+    "effects": [
+     {
+      "piece": "hero",
+      "fx": "move",
+      "to": {
+       "x": 62
+      },
+      "at": [
+       0.05,
+       0.95
+      ]
+     },
+     {
+      "piece": "ready",
+      "fx": "show",
+      "at": [
+       0.18,
+       0.48
+      ]
+     }
+    ]
+   },
+   "flap": {
+    "label": "What Pip learned",
+    "cover": "LIFT",
+    "text": "A steady place matters more than a fast start. Pip fixed the shelf, then settled the first box in a safe place.",
+    "effects": [
+     {
+      "piece": "loose_box",
+      "fx": "move",
+      "to": {
+       "x": 24,
+       "depth": 4,
+       "lift": 24,
+       "grow": 0.78
+      },
+      "at": [
+       0.08,
+       0.92
+      ]
+     }
+    ]
+   },
+   "facts": [
+    {
+     "label": "Boxes waiting",
+     "value": "6",
+     "source": "arrival-example"
+    },
+    {
+     "label": "Empty shelves",
+     "value": "2",
+     "source": "arrival-example"
+    },
+    {
+     "label": "Room maps drawn",
+     "value": "1",
+     "source": "arrival-example"
+    }
+   ],
+   "scene": {
+    "sky": "library",
+    "ground": "wood",
+    "alt": "Pip crosses a library corner with a shelf, a box and a glowing lamp.",
+    "wall": [
+     {
+      "sprite": "window_night",
+      "x": 72,
+      "y": 28,
+      "scale": 1.8
+     },
+     {
+      "id": "lamp",
+      "sprite": "lamp",
+      "x": 88,
+      "y": 56,
+      "scale": 1.5
+     }
+    ],
+    "pieces": [
+     {
+      "id": "ready",
+      "sprite": "bubble_ok",
+      "x": 50,
+      "depth": 2,
+      "scale": 1.6,
+      "hidden": true,
+      "lift": 0
+     },
+     {
+      "id": "shelf",
+      "sprite": "shelf",
+      "x": 22,
+      "depth": 4,
+      "scale": 2.5
+     },
+     {
+      "id": "loose_box",
+      "sprite": "box",
+      "x": 40,
+      "depth": 2,
+      "scale": 2.0
+     },
+     {
+      "id": "hero",
+      "sprite": "robot",
+      "alt": "robot_happy",
+      "x": 76,
+      "depth": 1,
+      "scale": 2.5
+     }
+    ]
+   }
+  },
+  {
+   "number": 2,
+   "title": "The rain test",
+   "when": "Tuesday afternoon",
+   "status": "written",
+   "text": [
+    "By Tuesday, every book had a label and every shelf had room to breathe. Then a delivery truck stopped outside. It carried three more boxes for the new library. Rain began before Pip could open the door. It drummed on the roof, ran under the step and gathered in a shining line across the floor. Pip raised an alarm sign and watched the nearest box.",
+    "The quickest route crossed the wet patch. Pip tried it with an empty trolley, but one wheel slipped sideways. He stopped. Moving faster would only turn dry books into soggy ones. Pip shifted the reading table away from the door and laid a strip of spare paper along the safe wall. He carried one small box along that route while the puddle rose, then waited for the water to sink.",
+    "The new path took twelve steps instead of seven. It was slower, but every box arrived dry. Pip set the final box on the workbench and lowered the alarm sign. Outside, the truck rolled away through the rain. Inside, the library still smelled of paper rather than puddles. Pip drew a blue line on his map so the safe route would be easy to follow next time."
+   ],
+   "tab": {
+    "label": "The wet route",
+    "hint": "Pull to move Pip beside the puddle",
+    "text": "Pip steps beside the puddle while the dry box waits by the bench.",
+    "effects": [
+     {
+      "piece": "hero",
+      "fx": "move",
+      "to": {
+       "x": 32,
+       "depth": 2,
+       "grow": 0.85
+      },
+      "at": [
+       0.02,
+       0.9
+      ]
+     }
+    ]
+   },
+   "flap": {
+    "label": "What Pip learned",
+    "cover": "LIFT",
+    "text": "The shorter path is not always the safer one. Pip chose twelve dry steps and settled the last box on the bench.",
+    "effects": [
+     {
+      "piece": "dry_box",
+      "fx": "move",
+      "to": {
+       "x": 80,
+       "depth": 4,
+       "z": 0.6,
+       "lift": 34,
+       "grow": 0.8
+      },
+      "at": [
+       0.06,
+       0.9
+      ]
+     }
+    ]
+   },
+   "facts": [
+    {
+     "label": "New boxes",
+     "value": "3",
+     "source": "rain-example"
+    },
+    {
+     "label": "Safe route steps",
+     "value": "12",
+     "source": "rain-example"
+    },
+    {
+     "label": "Wet books",
+     "value": "0",
+     "source": "rain-example"
+    }
+   ],
+   "scene": {
+    "sky": "storm",
+    "ground": "wood",
+    "alt": "Pip carries a dry box around a puddle while rain falls outside.",
+    "wall": [
+     {
+      "id": "cloud",
+      "sprite": "raincloud",
+      "x": 30,
+      "y": 22,
+      "scale": 1.8,
+      "bob": true
+     },
+     {
+      "sprite": "raincloud",
+      "x": 70,
+      "y": 16,
+      "scale": 1.6,
+      "bob": true
+     }
+    ],
+    "pieces": [
+     {
+      "sprite": "truck",
+      "x": 20,
+      "depth": 4,
+      "scale": 1.2
+     },
+     {
+      "sprite": "workbench",
+      "x": 82,
+      "depth": 4,
+      "scale": 2.0
+     },
+     {
+      "id": "puddle",
+      "sprite": "waves",
+      "x": 50,
+      "depth": 1,
+      "scale": 1.8
+     },
+     {
+      "id": "hero",
+      "sprite": "robot",
+      "x": 16,
+      "depth": 1,
+      "scale": 2.7
+     },
+     {
+      "id": "dry_box",
+      "sprite": "box",
+      "x": 90,
+      "depth": 2,
+      "scale": 1.2
+     },
+     {
+      "id": "alert",
+      "sprite": "bubble_alert",
+      "x": 16,
+      "z": 0.08,
+      "scale": 1.5,
+      "lift": 72
+     }
+    ]
+   }
+  },
+  {
+   "number": 3,
+   "title": "The evening choice",
+   "when": "Wednesday evening",
+   "status": "written",
+   "text": [
+    "On Wednesday evening, the little library was ready to open. Nine books stood on the display shelf. Three chairs faced the reading table. A gold paper cup waited in a box, ready for the first visitor who finished the puzzle trail. Pip checked the room once, then twice. Everything looked tidy, but the signpost still pointed towards the parcel door instead of the public entrance.",
+    "Pip could have hidden the mistake behind a plant. He could also have opened on time and hoped nobody noticed. Instead, he turned the signpost around and moved across the room to test the route as a visitor would. The alarm sign disappeared. The lamp lit the new direction. At the end of the path, Pip found the paper cup and smiled. The room finally explained itself without needing instructions.",
+    "At six o'clock, the first three visitors arrived together. They followed the sign, chose books and sat down without bumping a box or asking where to go. One child completed the puzzle trail and placed the cup on the round table for the next reader to find. Pip changed the final red mark on the plan to green. The library was not perfect, but it was clear, welcoming and ready to be used."
+   ],
+   "tab": {
+    "label": "The final check",
+    "hint": "Pull to walk Pip towards the prize",
+    "text": "Pip crosses the room towards the paper prize.",
+    "effects": [
+     {
+      "piece": "hero",
+      "fx": "move",
+      "to": {
+       "x": 36
+      },
+      "at": [
+       0.04,
+       0.96
+      ]
+     }
+    ]
+   },
+   "flap": {
+    "label": "What Pip learned",
+    "cover": "LIFT",
+    "text": "A room is ready when a newcomer can understand it. Pip tested the entrance. The prize waited on the table.",
+    "effects": [
+     {
+      "piece": "prize",
+      "fx": "move",
+      "to": {
+       "x": 84,
+       "depth": 3,
+       "z": 0.6,
+       "lift": 30,
+       "grow": 0.72
+      },
+      "at": [
+       0.08,
+       0.92
+      ]
+     }
+    ]
+   },
+   "facts": [
+    {
+     "label": "Display books",
+     "value": "9",
+     "source": "opening-example"
+    },
+    {
+     "label": "Reading chairs",
+     "value": "3",
+     "source": "opening-example"
+    },
+    {
+     "label": "First visitors",
+     "value": "3",
+     "source": "opening-example"
+    }
+   ],
+   "scene": {
+    "sky": "indoor",
+    "ground": "carpet",
+    "alt": "Pip tests a clear path between a signpost, a reading table and a prize.",
+    "wall": [
+     {
+      "sprite": "calendar",
+      "x": 18,
+      "y": 28,
+      "scale": 1.5
+     },
+     {
+      "sprite": "spark",
+      "x": 88,
+      "y": 40,
+      "scale": 1.4,
+      "cut": false
+     }
+    ],
+    "pieces": [
+     {
+      "sprite": "shelf_full",
+      "x": 16,
+      "depth": 4,
+      "scale": 2.2
+     },
+     {
+      "sprite": "table_round",
+      "x": 84,
+      "depth": 3,
+      "scale": 2.0
+     },
+     {
+      "id": "sign",
+      "sprite": "signpost",
+      "x": 52,
+      "depth": 4,
+      "scale": 1.9
+     },
+     {
+      "id": "hero",
+      "sprite": "robot",
+      "alt": "robot_happy",
+      "x": 24,
+      "depth": 1,
+      "scale": 2.5
+     },
+     {
+      "id": "prize",
+      "sprite": "trophy",
+      "x": 68,
+      "depth": 2,
+      "scale": 1.2
+     },
+     {
+      "id": "alert",
+      "sprite": "bubble_alert",
+      "x": 66,
+      "z": 0.08,
+      "scale": 1.5,
+      "lift": 68
+     }
+    ]
+   }
+  },
+  {
+   "number": 4,
+   "title": "The next visitor",
+   "when": "Tomorrow",
+   "status": "open",
+   "stamp": "To be written",
+   "text": [
+    "The next page belongs to whoever opens the library door tomorrow."
+   ],
+   "scene": {
+    "sky": "dawn",
+    "ground": "grass",
+    "alt": "Pip waits beside the library at dawn for the next visitor.",
+    "wall": [
+     {
+      "sprite": "sun",
+      "x": 76,
+      "y": 22,
+      "scale": 1.8
+     },
+     {
+      "sprite": "cloud",
+      "x": 26,
+      "y": 16,
+      "scale": 1.5,
+      "bob": true
+     }
+    ],
+    "pieces": [
+     {
+      "sprite": "house",
+      "x": 72,
+      "depth": 4,
+      "scale": 2.4
+     },
+     {
+      "sprite": "signpost",
+      "x": 48,
+      "depth": 3,
+      "scale": 2.0
+     },
+     {
+      "sprite": "robot_wave",
+      "x": 22,
+      "depth": 1,
+      "scale": 2.8,
+      "bob": true
+     },
+     {
+      "sprite": "plant",
+      "x": 88,
+      "depth": 1,
+      "scale": 1.5
+     }
+    ]
+   }
+  }
+ ],
+ "finale": {
+  "kicker": "One last opening",
+  "title": "The library rises",
+  "text": [
+   "Pip and the first readers rise together."
+  ],
+  "tab": {
+   "label": "Raise the last light",
+   "hint": "Pull to stand up the last reader and light",
+   "text": "A final reader and a bright paper light stand up inside the arch.",
+   "effects": [
+    {
+     "piece": "reader",
+     "fx": "show",
+     "at": [
+      0.08,
+      0.52
+     ]
+    },
+    {
+     "piece": "heart",
+     "fx": "show",
+     "at": [
+      0.5,
+      0.96
+     ]
+    }
+   ]
+  },
+  "flap": {
+   "label": "Inside the library",
+   "cover": "OPEN",
+   "text": "Every careful choice leaves the open book within reach.",
+   "effects": [
+    {
+     "piece": "open_book",
+     "fx": "move",
+     "to": {
+      "x": 25,
+      "depth": 1,
+      "lift": 30,
+      "grow": 1.12
+     },
+     "at": [
+      0.08,
+      0.92
+     ]
+    }
+   ]
+  },
+  "scene": {
+   "sky": "dusk",
+   "ground": "wood",
+   "alt": "A tall paper arch rises from the centre fold. Pip and the readers stand on three stepped paper platforms, with a paper light inside the arch.",
+   "wall": [
+    {
+     "sprite": "star",
+     "x": 14,
+     "y": 18,
+     "scale": 2.0,
+     "twinkle": true,
+     "cut": false
+    },
+    {
+     "sprite": "star",
+     "x": 86,
+     "y": 16,
+     "scale": 2.0,
+     "twinkle": true,
+     "cut": false
+    }
+   ],
+   "pieces": [
+    {
+     "id": "finale_structure",
+     "sprite": "finale_arch",
+     "x": 50,
+     "depth": 4,
+     "scale": 2.2,
+     "finaleRole": "structure",
+     "mount": "vfold",
+     "delay": 40
+    },
+    {
+     "sprite": "tree",
+     "x": 9,
+     "depth": 4,
+     "scale": 2.0,
+     "finaleRole": "scenery",
+     "mount": "wing-left",
+     "delay": 180
+    },
+    {
+     "sprite": "shelf_full",
+     "x": 91,
+     "depth": 4,
+     "scale": 1.5,
+     "finaleRole": "scenery",
+     "mount": "wing-right",
+     "delay": 220
+    },
+    {
+     "id": "friend_left",
+     "sprite": "robot_happy",
+     "x": 22,
+     "depth": 3,
+     "scale": 2.4,
+     "lift": 40,
+     "finaleRole": "cast",
+     "tier": 3,
+     "mount": "wing-left",
+     "delay": 340
+    },
+    {
+     "id": "friend_right",
+     "sprite": "person",
+     "x": 78,
+     "depth": 3,
+     "scale": 2.4,
+     "lift": 40,
+     "finaleRole": "cast",
+     "tier": 3,
+     "mount": "wing-right",
+     "delay": 390
+    },
+    {
+     "id": "reader",
+     "sprite": "person",
+     "x": 16,
+     "depth": 2,
+     "scale": 1.8,
+     "lift": 18,
+     "hidden": true,
+     "finaleRole": "cast",
+     "tier": 2,
+     "mount": "platform",
+     "delay": 520
+    },
+    {
+     "id": "open_book",
+     "sprite": "book_open",
+     "x": 25,
+     "depth": 2,
+     "scale": 2.2,
+     "lift": 18,
+     "finaleRole": "scenery",
+     "tier": 2,
+     "mount": "platform",
+     "delay": 560
+    },
+    {
+     "id": "hero",
+     "sprite": "robot_wave",
+     "x": 64,
+     "depth": 1,
+     "scale": 2.6,
+     "finaleRole": "cast",
+     "tier": 1,
+     "mount": "platform",
+     "delay": 720
+    },
+    {
+     "id": "heart",
+     "sprite": "star",
+     "x": 50,
+     "z": 0.04,
+     "scale": 2.4,
+     "lift": 90,
+     "hidden": true,
+     "finaleRole": "reveal",
+     "mount": "vfold",
+     "delay": 920
+    }
+   ]
+  }
+ },
+ "numbers": {
+  "kicker": "By the numbers",
+  "title": "Story numbers",
+  "intro": "Turn the wheel to revisit each part of this fictional example.",
+  "wheelTitle": "That page",
+  "stats": [
+   {
+    "label": "written pages",
+    "value": "3",
+    "source": "opening-example"
+   },
+   {
+    "label": "story facts",
+    "value": "9",
+    "source": "arrival-example"
+   },
+   {
+    "label": "open pages",
+    "value": "1",
+    "source": "rain-example"
+   }
+  ],
+  "months": [
+   {
+    "label": "Monday",
+    "lines": [
+     "6 boxes",
+     "2 shelves"
+    ],
+    "source": "arrival-example"
+   },
+   {
+    "label": "Tuesday",
+    "lines": [
+     "12 safe steps",
+     "0 wet books"
+    ],
+    "source": "rain-example"
+   },
+   {
+    "label": "Wednesday",
+    "lines": [
+     "9 display books",
+     "3 visitors"
+    ],
+    "source": "opening-example"
+   },
+   {
+    "label": "Tomorrow",
+    "lines": [
+     "the story stays open"
+    ],
+    "source": "opening-example"
+   }
+  ]
+ },
+ "back": {
+  "kicker": "The end for now",
+  "title": "A place for stories",
+  "text": [
+   "Pip began with a muddled room and finished with a clear path for the next visitor.",
+   "Every number in this book is fictional example data created only for this demonstration."
+  ],
+  "scene": {
+   "sky": "dusk",
+   "ground": "grass",
+   "alt": "Pip waves beside the little library at dusk.",
+   "wall": [
+    {
+     "sprite": "sun",
+     "x": 46,
+     "y": 42,
+     "scale": 2.2
+    }
+   ],
+   "pieces": [
+    {
+     "sprite": "house",
+     "x": 74,
+     "depth": 4,
+     "scale": 2.5
+    },
+    {
+     "sprite": "robot_wave",
+     "x": 34,
+     "depth": 1,
+     "scale": 3.0,
+     "bob": true
+    },
+    {
+     "sprite": "tree",
+     "x": 12,
+     "depth": 3,
+     "scale": 2.2
+    },
+    {
+     "sprite": "plant",
+     "x": 90,
+     "depth": 1,
+     "scale": 1.5
+    }
+   ]
+  }
+ },
+ "sources": {
+  "arrival-example": {
+   "kind": "example fictional data",
+   "title": "Example data: fictional arrival sheet",
+   "ref": "Fictional sample record created for this demonstration; not a real source.",
+   "excerpt": "Example only: six boxes, two empty shelves and one room map."
+  },
+  "rain-example": {
+   "kind": "example fictional data",
+   "title": "Example data: fictional rain test",
+   "ref": "Fictional sample record created for this demonstration; not a real source.",
+   "excerpt": "Example only: three boxes, twelve safe steps and zero wet books."
+  },
+  "opening-example": {
+   "kind": "example fictional data",
+   "title": "Example data: fictional opening check",
+   "ref": "Fictional sample record created for this demonstration; not a real source.",
+   "excerpt": "Example only: nine display books, three chairs and three first visitors."
+  }
+ }
+}

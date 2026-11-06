@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Popup Storybook Intake Questionnaire",
+  "type": "object",
+  "required": ["name", "title", "chapters"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "byline": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string",
+      "default": "Page"
+    },
+    "skip_terms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cast": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "chapters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["title", "summary", "trial", "lesson", "facts"],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "when": {
+            "type": "string"
+          },
+          "setting": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "trial": {
+            "type": "string"
+          },
+          "lesson": {
+            "type": "string"
+          },
+          "facts": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["label", "value", "ref", "excerpt"],
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "source_title": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "excerpt": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
