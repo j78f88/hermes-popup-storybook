@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.0.0
+
+- Added the Hermes plugin manifest, offline story creation, validation and build tools, and `/storybook` command.
+- Plugin stories, validation reports and HTML builds use profile-scoped `plugin_data_dir()` storage, with path traversal and symlink escape checks.
+- Packaged the plugin entry point, scaffold tools, templates and rendering assets for wheel installs.
+- Kept visual QA and browser/release subprocess helpers out of the registered plugin tools; documented them in the manifest and security policy.
+- Added registration, error-path and storage-boundary tests and an explicit fast pytest tier (`-m "not browser"`).
 
 - Mechanics contract (`docs/MECHANICS.md`) and checker (`tools/check_mechanics.py`): every paper part measured with real mouse, touch and keyboard input.
 - Page turns work like a real book. The leaf follows your hand, the leaf and both pop-ups move together, and each surface carries the right page. The finale splits at the spine.

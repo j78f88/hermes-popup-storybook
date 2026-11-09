@@ -20,5 +20,22 @@ dev = [
   "pytest>=8.0,<10",
 ]
 
+[project.entry-points."hermes_agent.plugins"]
+hermes-popup-storybook = "hermes_popup_storybook"
+
 [tool.setuptools]
-packages = ["engine"]
+packages = [
+  "hermes_popup_storybook",
+  "hermes_popup_storybook.engine",
+  "hermes_popup_storybook.tools",
+]
+package-dir = {hermes_popup_storybook = "."}
+
+[tool.setuptools.package-data]
+hermes_popup_storybook = ["plugin.yaml", "templates/*.md", "templates/*.json", "templates/qa-briefs/*.md"]
+"hermes_popup_storybook.engine" = ["*.html", "*.css", "*.js", "library/*.json"]
+
+[tool.pytest.ini_options]
+markers = [
+  "browser: slow integration tests requiring Playwright and installed browsers",
+]

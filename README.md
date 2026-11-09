@@ -58,6 +58,41 @@ Open `dist/my-book/index.html` in a browser. Arrow keys turn pages. On a phone, 
 
 Use `stories/example/story.json` as a larger reference after the starter page makes sense.
 
+## Hermes plugin
+
+The plugin provides `storybook_new`, `storybook_validate` and `storybook_build`,
+plus `/storybook`. It has no runtime dependencies, credentials or network calls.
+Install this directory using Hermes' normal plugin install and enable workflow.
+Python wheel installs also expose the `hermes_agent.plugins` entry point.
+See the official [plugin guide](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins).
+
+```text
+/storybook new my-book "My book"
+/storybook validate my-book
+/storybook build my-book
+```
+
+Tool arguments use `name` (a lowercase slug, not a path). Creation accepts `title`
+and `pages` (1-100, default 3); validation and build accept `strict` (default true).
+All handlers return JSON strings, including failures. Edit the returned story path
+to replace the fictional starter material, then validate and build again.
+
+Plugin output is under `plugin_data_dir("hermes-popup-storybook")`, following the
+active Hermes profile: `stories/<name>/`, `reports/<name>/validation.json` and
+`dist/<name>/index.html`. It never falls back to writing into the install tree or
+current directory. Creation refuses existing folders; builds replace only the
+selected story's HTML after validation succeeds. Slug and resolved-path checks
+reject traversal and symlink escapes. Open the returned HTML path locally; there
+is no automatic publishing.
+
+Optional CLI helpers remain separate: `_browser.py` starts the Python builder,
+`build_and_check.py` starts validation/build/QA scripts, `release_check.py` invokes
+Git, and Playwright launches browser processes. The unregistered `visual_qa.py`
+CLI uploads screenshots and briefs to OpenRouter (or `OPENROUTER_URL`), reads
+`OPENROUTER_API_KEY` from its environment, and may incur charges. Neither the tools
+nor `/storybook` call it. No credentials are stored. See `plugin.yaml` for the
+subprocess disclosures and `SECURITY.md` for limits and private reporting.
+
 ## The process
 
 Making a good book is mostly not code. `docs/PROCESS.md` is the method, in twelve steps:
@@ -141,6 +176,16 @@ tests/       unit and browser tests
 Keep real books in their own repos. A book carries private history, and the engine should be shareable without it.
 
 ## Tests
+
+For the fast tier (no browser launches), install the dev extra and run:
+
+```bash
+python3 -m pip install '.[dev]'
+python3 -m pytest -m "not browser"
+```
+
+Run the browser tier separately with `python3 -m pytest -m browser` after installing
+`.[dev,qa]` and Playwright browsers. Plain unittest discovery remains supported:
 
 ```bash
 python3 -m unittest discover -s tests

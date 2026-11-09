@@ -226,22 +226,14 @@ def parse_args(argv=None):
     return parser.parse_args(argv)
 
 
-def main(argv=None):
-    args = parse_args(argv)
-    if not NAME_PATTERN.fullmatch(args.name):
-        print(
-            "error: NAME must use lowercase letters, numbers, and hyphens",
-            file=sys.stderr,
-        )
-        return 2
-
-    parent = Path(args.dir)
-    target = parent / args.name
-    if target.exists():
-        print(f"error: {target} already exists", file=sys.stderr)
-        return 1
-
-    title = args.title or args.name.replace("-", " ").title()
+def create_story(name, parent, title=None, pages=3):
+    """Create a scaffold for CLI or plugin callers; never replace an existing story."""
+    if not isinstance(name, str) or not NAME_PATTERN.fullmatch(name):
+        raise ValueError("NAME must use lowercase letters, numbers, and hyphens")
+    if isinstance(pages, bool) or not isinstance(pages, int) or pages < 1:
+        raise ValueError("pages must be at least 1")
+    target = Path(parent) / name
+    title = title or name.replace("-", " ").title()
     target.mkdir(parents=True)
     for template, destination in COPIES.items():
         output = target / destination
@@ -249,10 +241,24 @@ def main(argv=None):
         shutil.copyfile(TEMPLATES / template, output)
 
     story_path = target / "story.json"
-    story_path.write_text(json.dumps(story_data(title, args.pages), indent=2) + "\n")
+    story_path.write_text(json.dumps(story_data(title, pages), indent=2) + "\n", encoding="utf-8")
     readme_path = target / "README.md"
-    readme_path.write_text(readme_text(title, story_path, args.name))
+    readme_path.write_text(readme_text(title, story_path, name), encoding="utf-8")
+    return story_path
 
+
+def main(argv=None):
+    args = parse_args(argv)
+    try:
+        story_path = create_story(args.name, args.dir, args.title, args.pages)
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 2
+    except FileExistsError:
+        print(f"error: {Path(args.dir) / args.name} already exists", file=sys.stderr)
+        return 1
+
+    target = story_path.parent
     open_count = args.pages - 1
     suffix = "page" if open_count == 1 else "pages"
     print(f"Created {target} with 1 written example page and {open_count} open {suffix}.")

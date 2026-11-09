@@ -12,8 +12,10 @@ import sys
 from pathlib import Path
 
 ENGINE = Path(__file__).resolve().parent
-sys.path.insert(0, str(ENGINE))
-import validate as V  # noqa: E402
+if __package__:
+    from . import validate as V
+else:
+    import validate as V
 
 
 def render(story):
