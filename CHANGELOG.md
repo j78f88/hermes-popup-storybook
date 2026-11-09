@@ -7,6 +7,8 @@
 - Packaged the plugin entry point, scaffold tools, templates and rendering assets for wheel installs.
 - Kept visual QA and browser/release subprocess helpers out of the registered plugin tools; documented them in the manifest and security policy.
 - Added registration, error-path and storage-boundary tests and an explicit fast pytest tier (`-m "not browser"`).
+- Tool errors now name the tool and cap the message length. `/storybook` prints plain text and declares an argument hint.
+- `visual_qa.py` resolves `OPENROUTER_API_KEY` through Hermes secret scope; the process environment is read only when Hermes is not importable.
 
 - Mechanics contract (`docs/MECHANICS.md`) and checker (`tools/check_mechanics.py`): every paper part measured with real mouse, touch and keyboard input.
 - Page turns work like a real book. The leaf follows your hand, the leaf and both pop-ups move together, and each surface carries the right page. The finale splits at the spine.

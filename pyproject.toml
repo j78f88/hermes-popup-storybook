@@ -36,6 +36,11 @@ hermes_popup_storybook = ["plugin.yaml", "templates/*.md", "templates/*.json", "
 "hermes_popup_storybook.engine" = ["*.html", "*.css", "*.js", "library/*.json"]
 
 [tool.pytest.ini_options]
+# The repository root is also a Hermes plugin package whose __init__.py uses relative
+# imports. Stopping conftest/package discovery at tests/ keeps pytest from importing that
+# file under a name taken from the checkout folder, so a plain `pytest` works in any clone.
+testpaths = ["tests"]
+addopts = "--confcutdir=tests"
 markers = [
   "browser: slow integration tests requiring Playwright and installed browsers",
 ]

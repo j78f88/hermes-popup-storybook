@@ -39,7 +39,8 @@ and Git release-check scripts. Browser QA needs the qa extra and installed
 Playwright browsers. No registered handler imports those helpers.
 
 The separate tools/visual_qa.py CLI is deliberately not registered or invoked by
-/storybook. It reads OPENROUTER_API_KEY from its process environment and sends
+/storybook. It reads OPENROUTER_API_KEY through Hermes secret scope, or from its
+process environment only when Hermes is not importable, and sends
 screenshots and briefs to OpenRouter, or a configured OPENROUTER_URL, potentially
 incurring charges. Use it only explicitly, with reviewed material and a trusted
 endpoint. Never supply sensitive screenshots without permission. The default

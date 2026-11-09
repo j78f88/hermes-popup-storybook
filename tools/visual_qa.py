@@ -25,6 +25,22 @@ STATE_LABELS = {
 }
 
 
+def _api_key() -> str | None:
+    """Resolve OPENROUTER_API_KEY through Hermes secret scope when it is importable.
+
+    Inside Hermes the scope answers for the active profile and a miss is final, so one
+    profile never picks up another profile's key from os.environ. os.environ is read
+    only when Hermes is not importable (standalone CLI use). No .env file is opened.
+    """
+    try:
+        from agent.secret_scope import get_secret
+    except ImportError:
+        value = os.environ.get("OPENROUTER_API_KEY")
+    else:
+        value = get_secret("OPENROUTER_API_KEY")
+    return value.strip() if isinstance(value, str) and value.strip() else None
+
+
 def render_brief(template: str, vars: Mapping[str, str]) -> str:
     """Replace every template placeholder or raise for missing values."""
     names = set(PLACEHOLDER.findall(template))
@@ -222,7 +238,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         return 0
 
-    key = os.environ.get("OPENROUTER_API_KEY")
+    key = _api_key()
     if not key:
         parser.error("OPENROUTER_API_KEY is required unless --dry-run is used")
 

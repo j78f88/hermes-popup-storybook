@@ -1,6 +1,10 @@
 name: hermes-popup-storybook
 version: 1.0.0
 description: Create, validate and build private offline pop-up storybooks.
+author: "Hermes Agent"
+license: MIT
+homepage: https://github.com/j78f88/hermes-popup-storybook
+tags: [storybook, offline, html]
 requires_hermes: ">=0.22.6"
 provides_tools:
   - storybook_new
@@ -27,5 +31,6 @@ disclosures:
     (or OPENROUTER_URL) and can incur model charges. It is never imported by register().
   credentials: >-
     Registered tools require and store no credentials. The separate visual_qa.py
-    CLI reads OPENROUTER_API_KEY; it is not a default plugin tool and is not
-    enabled or called by /storybook.
+    CLI reads OPENROUTER_API_KEY through agent.secret_scope.get_secret, and from the
+    process environment only when Hermes is not importable; it opens no .env file. It
+    is not a default plugin tool and is not enabled or called by /storybook.

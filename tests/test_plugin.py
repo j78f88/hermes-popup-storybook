@@ -26,14 +26,16 @@ class FakeContext:
     def __init__(self):
         self.tools = {}
         self.commands = {}
+        self.command_meta = {}
 
-    def register_tool(self, name, toolset, schema, handler):
+    def register_tool(self, name, toolset, schema, handler, **kwargs):
         assert name not in self.tools
-        self.tools[name] = {"toolset": toolset, "schema": schema, "handler": handler}
+        self.tools[name] = {"toolset": toolset, "schema": schema, "handler": handler, **kwargs}
 
-    def register_command(self, name, handler, description=""):
+    def register_command(self, name, handler, description="", args_hint="", **kwargs):
         assert name not in self.commands
         self.commands[name] = handler
+        self.command_meta[name] = {"description": description, "args_hint": args_hint}
 
 
 @pytest.fixture
@@ -257,15 +259,90 @@ def test_storage_helper_is_profile_scoped_and_not_cached(tmp_path):
 def test_slash_command_end_to_end(registered):
     ctx, _ = registered
     command = ctx.commands["storybook"]
-    assert "usage" in json.loads(command(""))
-    assert json.loads(command('new command-book "A quoted title"'))["ok"]
-    assert json.loads(command("validate command-book"))["ok"]
-    result = json.loads(command("build command-book --strict"))
-    assert result["ok"]
-    assert "A quoted title" in Path(result["html"]).read_text()
+    assert command("").startswith("Usage:")
+    created = command('new command-book "A quoted title"')
+    assert created.startswith("Created story command-book")
+    assert command("validate command-book").startswith("Valid: command-book")
+    built = command("build command-book --strict")
+    assert built.startswith("Built: command-book")
+    html = Path(next(line for line in built.splitlines() if line.startswith("HTML: "))[len("HTML: "):])
+    assert "A quoted title" in html.read_text()
+    assert any(line.startswith("SHA-256: ") for line in built.splitlines())
 
 
 @pytest.mark.parametrize("raw", ['new "unterminated', "new", "unknown book", "build book --out outside", "validate ../outside"])
 def test_slash_command_error_paths(registered, raw):
     ctx, _ = registered
-    assert not json.loads(ctx.commands["storybook"](raw))["ok"]
+    reply = ctx.commands["storybook"](raw, task_id="t")
+    assert isinstance(reply, str)
+    assert reply.startswith(("storybook error:", "storybook ")) and not reply.startswith(("Created", "Valid", "Built"))
+
+
+def test_error_envelope_names_the_tool_and_truncates(registered, monkeypatch):
+    ctx, _ = registered
+    long_message = "x" * 5000
+
+    def fail():
+        raise RuntimeError(long_message)
+
+    monkeypatch.setattr(plugin, "_data_root", fail)
+    for tool in sorted(TOOL_NAMES):
+        result = call(ctx, tool, {"name": "test-book"})
+        assert result["ok"] is False
+        assert result["tool"] == tool
+        assert result["error_type"] == "RuntimeError"
+        assert len(result["error"]) <= plugin._MAX_ERROR_CHARS + 3
+
+
+def test_command_is_registered_with_a_hint_and_returns_text(registered):
+    ctx, data = registered
+    assert ctx.command_meta["storybook"]["args_hint"]
+    command = ctx.commands["storybook"]
+    assert command("help") == plugin.USAGE
+    failed = command("validate missing-book")
+    assert failed.startswith("storybook validate failed:") and not failed.startswith("{")
+    assert not data.exists()
+
+
+def test_title_length_is_bounded(registered):
+    ctx, data = registered
+    result = call(ctx, "storybook_new", {"name": "test-book", "title": "t" * (plugin._MAX_TITLE_CHARS + 1)})
+    assert result["ok"] is False and "title" in result["error"]
+    assert not data.exists()
+
+
+def test_register_describes_every_tool(registered):
+    ctx, _ = registered
+    for registration in ctx.tools.values():
+        assert registration["description"] and registration["emoji"]
+
+
+def test_plugin_entry_reads_no_credentials_or_global_state():
+    source = (ROOT / "__init__.py").read_text(encoding="utf-8")
+    for needle in ("environ", "getenv", ".env", "sys.path", "sys.argv", "chdir"):
+        assert needle not in source, needle
+
+
+def _load_visual_qa():
+    spec = importlib.util.spec_from_file_location("visual_qa_under_test", ROOT / "tools" / "visual_qa.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_visual_qa_key_comes_from_secret_scope_and_a_miss_is_final(monkeypatch):
+    visual_qa = _load_visual_qa()
+    monkeypatch.setenv("OPENROUTER_API_KEY", "other-profile-value")
+    agent = types.ModuleType("agent")
+    scope = types.ModuleType("agent.secret_scope")
+    scope.get_secret = lambda name, default=None: None
+    agent.secret_scope = scope
+    with patch.dict(sys.modules, {"agent": agent, "agent.secret_scope": scope}):
+        assert visual_qa._api_key() is None
+        scope.get_secret = lambda name, default=None: " scoped-value "
+        assert visual_qa._api_key() == "scoped-value"
+    with patch.dict(sys.modules, {"agent.secret_scope": None}):
+        assert visual_qa._api_key() == "other-profile-value"
+    monkeypatch.delenv("OPENROUTER_API_KEY")
+    with patch.dict(sys.modules, {"agent.secret_scope": None}):
+        assert visual_qa._api_key() is None

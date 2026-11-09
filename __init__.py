@@ -10,9 +10,14 @@ from .engine import build, validate
 from .tools import new_story
 
 PLUGIN_NAME = "hermes-popup-storybook"
+_MAX_ERROR_CHARS = 500
+_MAX_TITLE_CHARS = 200
 USAGE = (
-    '/storybook new <name> ["Title"] | '
-    '/storybook validate <name> [--strict] | /storybook build <name> [--strict]'
+    "Usage:\n"
+    '  /storybook new <name> ["Title"]\n'
+    "  /storybook validate <name> [--strict]\n"
+    "  /storybook build <name> [--strict]\n"
+    "<name> is a lowercase slug. Stories, reports and HTML stay in the plugin data folder."
 )
 
 
@@ -40,13 +45,22 @@ def _name(args):
     return name
 
 
+def _error_payload(tool, error):
+    message = str(error) or type(error).__name__
+    if len(message) > _MAX_ERROR_CHARS:
+        message = message[:_MAX_ERROR_CHARS] + "..."
+    return {"ok": False, "tool": tool, "error": message, "error_type": type(error).__name__}
+
+
 def _json_handler(handler):
+    """Return a JSON string for every call and never raise; errors name the tool."""
+
     @functools.wraps(handler)
-    def wrapped(args, **kwargs):
+    def wrapped(args=None, **kwargs):
         try:
             return json.dumps(handler(args, **kwargs), ensure_ascii=False)
-        except Exception as error:
-            return json.dumps({"ok": False, "error": str(error), "error_type": type(error).__name__})
+        except Exception as error:  # noqa: BLE001 - tool contract: always return JSON
+            return json.dumps(_error_payload(handler.__name__, error), ensure_ascii=False)
 
     return wrapped
 
@@ -59,8 +73,8 @@ def storybook_new(args, **kwargs):
     if isinstance(pages, bool) or not isinstance(pages, int) or not 1 <= pages <= 100:
         raise ValueError("pages must be an integer from 1 to 100")
     title = args.get("title")
-    if title is not None and (not isinstance(title, str) or not title.strip()):
-        raise ValueError("title must be a non-empty string")
+    if title is not None and (not isinstance(title, str) or not title.strip() or len(title) > _MAX_TITLE_CHARS):
+        raise ValueError(f"title must be a non-empty string of at most {_MAX_TITLE_CHARS} characters")
     root = _data_root()
     parent = _path(root, "stories")
     _path(root, "stories", name)
@@ -119,12 +133,30 @@ def storybook_build(args, **kwargs):
     return result
 
 
-def storybook_command(raw_args):
-    """Dispatch /storybook locally; input is tokenized, never shell-executed."""
+def _command_text(action, payload):
+    """Render a tool result as plain text for the slash command."""
+    if not payload.get("ok"):
+        lines = [f"storybook {action} failed: {payload.get('error') or 'story is not valid'}"]
+        lines += [f"  error: {item}" for item in payload.get("errors", [])]
+        lines += [f"  warning: {item}" for item in payload.get("warnings", [])]
+        return "\n".join(lines)
+    if action == "new":
+        return f"Created story {payload['name']} ({payload['pages']} pages)\nStory: {payload['story']}"
+    lines = [f"{'Built' if action == 'build' else 'Valid'}: {payload['name']}"]
+    lines += [f"  warning: {item}" for item in payload.get("warnings", [])]
+    if action == "validate":
+        lines.append(f"Report: {payload['report']}")
+    else:
+        lines += [f"HTML: {payload['html']}", f"SHA-256: {payload['sha256']}"]
+    return "\n".join(lines)
+
+
+def storybook_command(raw_args="", **kwargs):
+    """Dispatch /storybook locally as plain text. Input is tokenized, never shell-executed, and never raises."""
     try:
-        parts = shlex.split(raw_args)
+        parts = shlex.split(raw_args or "")
         if not parts or parts == ["help"]:
-            return json.dumps({"usage": USAGE})
+            return USAGE
         if len(parts) < 2:
             raise ValueError(USAGE)
         action, name, *rest = parts
@@ -132,13 +164,13 @@ def storybook_command(raw_args):
             args = {"name": name}
             if rest:
                 args["title"] = " ".join(rest)
-            return storybook_new(args)
+            return _command_text(action, json.loads(storybook_new(args)))
         if action in {"validate", "build"} and rest in ([], ["--strict"]):
             handler = storybook_validate if action == "validate" else storybook_build
-            return handler({"name": name, "strict": True})
+            return _command_text(action, json.loads(handler({"name": name, "strict": True})))
         raise ValueError(USAGE)
-    except Exception as error:
-        return json.dumps({"ok": False, "error": str(error)})
+    except Exception as error:  # noqa: BLE001 - never crash the session
+        return f"storybook error: {error}"
 
 
 def _schema(name, description, extra):
@@ -169,10 +201,12 @@ def register(ctx):
         name="storybook_new",
         toolset="storybook",
         schema=_schema("storybook_new", "Create a private story scaffold under plugin data; refuses to overwrite existing stories.", {
-            "title": {"type": "string", "minLength": 1, "description": "Cover title; defaults to the story name"},
+            "title": {"type": "string", "minLength": 1, "maxLength": _MAX_TITLE_CHARS, "description": "Cover title; defaults to the story name"},
             "pages": {"type": "integer", "minimum": 1, "maximum": 100, "default": 3},
         }),
         handler=storybook_new,
+        description="Create a private offline story scaffold",
+        emoji="📖",
     )
     strict = {"strict": {"type": "boolean", "default": True, "description": "Treat validation warnings as failures"}}
     ctx.register_tool(
@@ -180,11 +214,20 @@ def register(ctx):
         toolset="storybook",
         schema=_schema("storybook_validate", "Validate a plugin story's structure, sources and privacy patterns; save a JSON report.", strict),
         handler=storybook_validate,
+        description="Validate an offline story and save a report",
+        emoji="🔍",
     )
     ctx.register_tool(
         name="storybook_build",
         toolset="storybook",
         schema=_schema("storybook_build", "Validate a plugin story, then build one offline HTML book in plugin data; returns its path and SHA-256.", strict),
         handler=storybook_build,
+        description="Build one offline HTML storybook",
+        emoji="🛠️",
     )
-    ctx.register_command("storybook", storybook_command, description="Create, validate or build an offline pop-up storybook")
+    ctx.register_command(
+        "storybook",
+        storybook_command,
+        description="Create, validate or build an offline pop-up storybook",
+        args_hint="new|validate|build <name>",
+    )
