@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- `/storybook help` is now a full help page with usage, examples and notes. Bad commands name the problem and point to it. The README carries the same text, and a test keeps both in step.
+- README: banner, flow diagram, install steps and a troubleshooting table (`docs/assets/`).
+
 ## 1.0.0
 
 - Added the Hermes plugin manifest, offline story creation, validation and build tools, and `/storybook` command.

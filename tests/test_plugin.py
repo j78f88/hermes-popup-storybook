@@ -259,7 +259,7 @@ def test_storage_helper_is_profile_scoped_and_not_cached(tmp_path):
 def test_slash_command_end_to_end(registered):
     ctx, _ = registered
     command = ctx.commands["storybook"]
-    assert command("").startswith("Usage:")
+    assert command("").startswith("/storybook - ") and "Usage:" in command("")
     created = command('new command-book "A quoted title"')
     assert created.startswith("Created story command-book")
     assert command("validate command-book").startswith("Valid: command-book")
@@ -298,7 +298,7 @@ def test_command_is_registered_with_a_hint_and_returns_text(registered):
     ctx, data = registered
     assert ctx.command_meta["storybook"]["args_hint"]
     command = ctx.commands["storybook"]
-    assert command("help") == plugin.USAGE
+    assert command("help") == plugin.HELP_TEXT
     failed = command("validate missing-book")
     assert failed.startswith("storybook validate failed:") and not failed.startswith("{")
     assert not data.exists()
@@ -346,3 +346,64 @@ def test_visual_qa_key_comes_from_secret_scope_and_a_miss_is_final(monkeypatch):
     monkeypatch.delenv("OPENROUTER_API_KEY")
     with patch.dict(sys.modules, {"agent.secret_scope": None}):
         assert visual_qa._api_key() is None
+
+
+# --- /help text, README and visuals (docs pass) ------------------------------
+
+import xml.etree.ElementTree as ET  # noqa: E402
+
+
+def _readme():
+    return (ROOT / "README.md").read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize("word", ["", "help", "HELP", "-h", "--help", "?"])
+def test_help_words_all_print_the_help_text(registered, word):
+    ctx, _ = registered
+    assert ctx.commands["storybook"](word) == plugin.HELP_TEXT
+
+
+def test_help_text_covers_every_action_and_tool():
+    for needle in ["Usage:", "Examples:", "Notes:", "/storybook new", "/storybook validate", "/storybook build",
+                   "/storybook help", *TOOL_NAMES]:
+        assert needle in plugin.HELP_TEXT, needle
+    assert max(len(line) for line in plugin.HELP_TEXT.splitlines()) <= 90
+
+
+def test_bad_commands_point_to_help_without_repeating_it(registered):
+    ctx, _ = registered
+    for raw in ["new", "frobnicate book", "build book --out outside"]:
+        reply = ctx.commands["storybook"](raw)
+        assert reply.startswith("storybook error:") and "Run /storybook help for usage." in reply
+        assert "Examples:" not in reply
+
+
+def test_registered_hint_lists_the_actions(registered):
+    ctx, _ = registered
+    hint = ctx.command_meta["storybook"]["args_hint"]
+    for needle in ["new", "validate", "build", "help"]:
+        assert needle in hint
+
+
+def test_readme_shows_the_exact_help_text():
+    assert "```text\n" + plugin.HELP_TEXT + "\n```" in _readme()
+
+
+def test_readme_troubleshooting_quotes_real_messages():
+    source = (ROOT / "__init__.py").read_text(encoding="utf-8")
+    for message in ["name must be 1-64 lowercase letters, numbers or hyphens", "Story validation failed; nothing built",
+                    "Run /storybook help for usage."]:
+        assert message in _readme() and message in source, message
+
+
+def test_readme_visuals_exist_parse_and_stay_self_contained():
+    readme = _readme()
+    for name in ["banner.svg", "flow.svg"]:
+        assert f"docs/assets/{name})" in readme
+        path = ROOT / "docs" / "assets" / name
+        root = ET.parse(path).getroot()
+        assert root.tag.endswith("svg")
+        assert root.find("{http://www.w3.org/2000/svg}title") is not None
+        body = path.read_text(encoding="utf-8")
+        assert "<script" not in body and "href=" not in body and "@import" not in body
+        assert body.count("http") == body.count("http://www.w3.org/2000/svg")

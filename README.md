@@ -1,5 +1,7 @@
 # hermes-popup-storybook
 
+![hermes-popup-storybook: one story file in, one offline pop-up book out](docs/assets/banner.svg)
+
 Make a virtual pop-up book from a real history. You write one story file. The engine builds one HTML file that works offline, on a desk or a phone, and prints as a flat edition.
 
 It is made for keepsakes: a project's story before a shutdown, a team's year, a handover. Every fact in the book points to its source.
@@ -60,9 +62,20 @@ Use `stories/example/story.json` as a larger reference after the starter page ma
 
 ## Hermes plugin
 
+![How the plugin works: new, edit story.json, validate, build](docs/assets/flow.svg)
+
+### Install
+
+```bash
+hermes plugins install j78f88/hermes-popup-storybook
+hermes plugins enable hermes-popup-storybook
+```
+
+Start a new Hermes session and run `/storybook help`. To check a local checkout first, run
+`hermes plugins validate .` and `hermes plugins doctor --ci .` from its root.
+
 The plugin provides `storybook_new`, `storybook_validate` and `storybook_build`,
 plus `/storybook`. It has no runtime dependencies, credentials or network calls.
-Install this directory using Hermes' normal plugin install and enable workflow.
 Python wheel installs also expose the `hermes_agent.plugins` entry point.
 See the official [plugin guide](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins).
 
@@ -71,6 +84,46 @@ See the official [plugin guide](https://hermes-agent.nousresearch.com/docs/devel
 /storybook validate my-book
 /storybook build my-book
 ```
+
+### Slash command help
+
+`/storybook`, `/storybook help`, `-h`, `--help` and `?` print this text. A test keeps this copy in step with the code.
+
+```text
+/storybook - build an offline pop-up storybook from one story file
+
+Usage:
+  /storybook new <name> ["Title"]         Create a starter story folder
+  /storybook validate <name> [--strict]   Check the story and write a report
+  /storybook build <name> [--strict]      Validate, then write one offline HTML file
+  /storybook help                         Show this message
+
+<name> is a lowercase slug, not a path. Validation is always strict.
+
+Examples:
+  /storybook new my-book "My book"
+  /storybook validate my-book
+  /storybook build my-book
+
+Notes:
+  Stories, reports and HTML stay in the plugin data folder. No network, no credentials.
+  Edit the story file that "new" prints, then validate and build again.
+  The same steps are available to the agent as storybook_new, storybook_validate
+  and storybook_build.
+```
+
+In `/help`, Hermes lists the command as `/storybook new|validate|build <name> | help`.
+
+### Troubleshooting
+
+| You see | Cause and fix |
+|---|---|
+| `name must be 1-64 lowercase letters, numbers or hyphens` | Use a slug such as `my-book`, not a path or a title. |
+| `Story validation failed; nothing built` | Run `/storybook validate <name>`. The report lists each error and warning. Fix the story file and build again. |
+| `cannot run ... Run /storybook help for usage.` | The action or its arguments were not recognised. Check the usage above. |
+| `/storybook` is not found | The plugin is installed but not enabled. Run `hermes plugins enable hermes-popup-storybook` and start a new session. |
+
+### Details
 
 Tool arguments use `name` (a lowercase slug, not a path). Creation accepts `title`
 and `pages` (1-100, default 3); validation and build accept `strict` (default true).
@@ -127,6 +180,7 @@ The owner signs off the brief and the storyboard before the full build. Steps 9 
 | `docs/TOOLS.md` | The QA and publishing tools |
 | `docs/SPRITES.md` | Searchable sprite names, sizes and tags |
 | `docs/sprites.png` | A visual sheet of every sprite |
+| `docs/assets/` | The banner and flow diagram used in this README |
 | `templates/` | Brief, sources, outline, storyboard, fact ledger, checklists and QA briefs |
 
 ## Tools

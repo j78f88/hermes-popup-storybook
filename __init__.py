@@ -12,13 +12,29 @@ from .tools import new_story
 PLUGIN_NAME = "hermes-popup-storybook"
 _MAX_ERROR_CHARS = 500
 _MAX_TITLE_CHARS = 200
-USAGE = (
-    "Usage:\n"
-    '  /storybook new <name> ["Title"]\n'
-    "  /storybook validate <name> [--strict]\n"
-    "  /storybook build <name> [--strict]\n"
-    "<name> is a lowercase slug. Stories, reports and HTML stay in the plugin data folder."
-)
+HELP_TEXT = """\
+/storybook - build an offline pop-up storybook from one story file
+
+Usage:
+  /storybook new <name> ["Title"]         Create a starter story folder
+  /storybook validate <name> [--strict]   Check the story and write a report
+  /storybook build <name> [--strict]      Validate, then write one offline HTML file
+  /storybook help                         Show this message
+
+<name> is a lowercase slug, not a path. Validation is always strict.
+
+Examples:
+  /storybook new my-book "My book"
+  /storybook validate my-book
+  /storybook build my-book
+
+Notes:
+  Stories, reports and HTML stay in the plugin data folder. No network, no credentials.
+  Edit the story file that "new" prints, then validate and build again.
+  The same steps are available to the agent as storybook_new, storybook_validate
+  and storybook_build."""
+USAGE = HELP_TEXT  # name kept for callers that imported the old constant
+HELP_WORDS = frozenset({"help", "-h", "--help", "?"})
 
 
 def _data_root():
@@ -155,10 +171,10 @@ def storybook_command(raw_args="", **kwargs):
     """Dispatch /storybook locally as plain text. Input is tokenized, never shell-executed, and never raises."""
     try:
         parts = shlex.split(raw_args or "")
-        if not parts or parts == ["help"]:
-            return USAGE
+        if not parts or (len(parts) == 1 and parts[0].lower() in HELP_WORDS):
+            return HELP_TEXT
         if len(parts) < 2:
-            raise ValueError(USAGE)
+            raise ValueError(f"incomplete command {parts[0]!r}. Run /storybook help for usage.")
         action, name, *rest = parts
         if action == "new":
             args = {"name": name}
@@ -168,7 +184,7 @@ def storybook_command(raw_args="", **kwargs):
         if action in {"validate", "build"} and rest in ([], ["--strict"]):
             handler = storybook_validate if action == "validate" else storybook_build
             return _command_text(action, json.loads(handler({"name": name, "strict": True})))
-        raise ValueError(USAGE)
+        raise ValueError(f"cannot run {action!r} with those arguments. Run /storybook help for usage.")
     except Exception as error:  # noqa: BLE001 - never crash the session
         return f"storybook error: {error}"
 
@@ -229,5 +245,5 @@ def register(ctx):
         "storybook",
         storybook_command,
         description="Create, validate or build an offline pop-up storybook",
-        args_hint="new|validate|build <name>",
+        args_hint="new|validate|build <name> | help",
     )
