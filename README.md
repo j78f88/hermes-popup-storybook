@@ -242,10 +242,12 @@ python3 -m pytest -m "not browser"
 ```
 
 Run the browser tier separately with `python3 -m pytest -m browser` after installing
-`.[dev,qa]` and Playwright browsers. Plain unittest discovery remains supported:
+`.[dev,qa]` and Playwright browsers. Plain unittest discovery still runs the `unittest` suites.
+It does not run `tests/test_plugin.py`, which needs pytest:
 
 ```bash
 python3 -m unittest discover -s tests
+python3 -m pytest -q tests/test_plugin.py
 ```
 
 Node is used to syntax-check and smoke-run the page script. Browser tests are skipped when Playwright is not installed.

@@ -15,6 +15,7 @@ Thanks for helping. This is a small engine with a strong point of view, so a few
 python3 engine/validate.py stories/example/story.json --strict
 python3 tools/check_ledger.py templates/ledger-template.json --story stories/example/story.json --claims strict
 python3 -m unittest discover -s tests
+python3 -m pytest -q tests/test_plugin.py
 python3 tools/check_layout.py stories/example/story.json --phone
 python3 tools/check_mechanics.py stories/example/story.json --phone
 python3 tools/release_check.py

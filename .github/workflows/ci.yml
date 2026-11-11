@@ -28,6 +28,9 @@ jobs:
       - name: Run unit tests
         run: python -m unittest discover -s tests
 
+      - name: Run plugin tests
+        run: python -m pytest -q tests/test_plugin.py
+
       - name: Check example layout
         run: python tools/check_layout.py stories/example/story.json --phone
 

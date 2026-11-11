@@ -138,9 +138,13 @@ The output lists every resolved variable. The full brief is saved as `qa-dry-run
 
 Provide every required brief template value with repeated `--var key=value` command arguments.
 
-Authentication failures mean `OPENROUTER_API_KEY` is missing, invalid, or unavailable to the process.
+Authentication failures mean `OPENROUTER_API_KEY` is missing or invalid.
 
-Set a valid environment value, then repeat the same command without changing inputs.
+When Hermes is importable, the key comes from the active Hermes profile through Hermes secret scope. An exported shell variable is not used then.
+
+When Hermes is not importable, the key comes from the process environment. No `.env` file is read.
+
+Set the key in the place that applies, then repeat the same command without changing inputs.
 
 Empty image failures mean the directory contains no supported screenshots for review.
 
