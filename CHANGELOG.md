@@ -1,12 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.0.0
 
 - `/storybook help` is now a full help page with usage, examples and notes. Bad commands name the problem and point to it. The README carries the same text, and a test keeps both in step.
 - README: banner, flow diagram, install steps and a troubleshooting table (`docs/assets/`).
-
-## 1.0.0
-
 - Added the Hermes plugin manifest, offline story creation, validation and build tools, and `/storybook` command.
 - Plugin stories, validation reports and HTML builds use profile-scoped `plugin_data_dir()` storage, with path traversal and symlink escape checks.
 - Packaged the plugin entry point, scaffold tools, templates and rendering assets for wheel installs.
@@ -14,7 +11,6 @@
 - Added registration, error-path and storage-boundary tests and an explicit fast pytest tier (`-m "not browser"`).
 - Tool errors now name the tool and cap the message length. `/storybook` prints plain text and declares an argument hint.
 - `visual_qa.py` resolves `OPENROUTER_API_KEY` through Hermes secret scope; the process environment is read only when Hermes is not importable.
-
 - Mechanics contract (`docs/MECHANICS.md`) and checker (`tools/check_mechanics.py`): every paper part measured with real mouse, touch and keyboard input.
 - Page turns work like a real book. The leaf follows your hand, the leaf and both pop-ups move together, and each surface carries the right page. The finale splits at the spine.
 - The lesson flap lifts upwards, as its arrow shows. Tabs remember where you left them. Turning a page presses a lifted flap shut.

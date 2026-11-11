@@ -15,7 +15,8 @@ ENGINE = Path(__file__).resolve().parent
 if __package__:
     from . import validate as V
 else:
-    import validate as V
+    sys.path.insert(0, str(ENGINE))
+    import validate as V  # noqa: E402
 
 
 def render(story):

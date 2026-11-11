@@ -6,9 +6,13 @@ import json
 import sys
 import types
 from pathlib import Path
+import unittest
 from unittest.mock import patch
 
-import pytest
+try:
+    import pytest
+except ImportError:  # plain unittest discovery without the dev extra
+    raise unittest.SkipTest("tests/test_plugin.py needs pytest: python3 -m pip install '.[dev]'")
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location(
