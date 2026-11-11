@@ -1,7 +1,7 @@
 name: hermes-popup-storybook
 version: 1.0.0
 description: Create, validate and build private offline pop-up storybooks.
-author: "Hermes Agent"
+author: "Pop-up Storybook contributors"
 license: MIT
 homepage: https://github.com/j78f88/hermes-popup-storybook
 tags: [storybook, offline, html]

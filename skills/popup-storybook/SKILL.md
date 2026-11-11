@@ -2,7 +2,7 @@
 name: popup-storybook
 description: Use when building a sourced pop-up storybook or keepsake.
 version: 1.0.0
-author: Hermes Agent
+author: Pop-up Storybook contributors
 license: MIT
 platforms: [linux, macos]
 metadata:
